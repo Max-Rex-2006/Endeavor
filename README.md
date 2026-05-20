@@ -1,46 +1,60 @@
-# Meta Phreaks — KDSH 2026
+# Endeavor — Personal Linux Scripts
 
-A RAG (Retrieval-Augmented Generation) pipeline built during the **KDSH 2026 Hackathon** to verify the factual consistency of narrative claims against long-form text sources like novels or historical documents.
+A collection of shell scripts and utilities built for daily use on Arch-based Linux systems (EndeavourOS / CachyOS). Written to automate repetitive tasks and extend desktop functionality.
 
-## What it does
+## Scripts
 
-Given a set of claims, the system:
-- Chunks source text into overlapping token windows for accurate retrieval
-- Embeds both documents and queries using OpenAI's `text-embedding-3-small`
-- Retrieves the top-K most relevant passages via a vector index (Pathway)
-- Evaluates whether each claim is **consistent** or **contradicted** by the evidence
-- Outputs structured, machine-readable verdicts in JSON format
+### `battery.sh`
+Automated battery management daemon for laptops.
 
-## Tech Stack
+- Switches to **power-saver** mode below 60%
+- **Suspends** the system at 40% (discharging only)
+- **Shuts down** at 20% with a 5-second warning notification
+- Reverts to **balanced** mode above 70%
+- Runs as a background loop, checks every 60 seconds
 
-- **Python** — core pipeline
-- **Pathway** — real-time document ingestion and vector indexing
-- **OpenAI API** — embeddings
-- **tiktoken** — token-based chunking with overlap
-
-## Project Structure
-
-```
-Projects/
-├── Code.py          # RAG pipeline (ingestion, chunking, retrieval)
-├── Claims.json      # Input claims to verify
-├── Evidence.json    # Retrieved evidence passages
-├── Judgements.json  # Verdict output per claim
-├── results.csv      # Summary results
-└── Readme.txt       # Original problem overview
-```
-
-## How to run
-
-```bash
-export OPENAI_API_KEY=your_key_here
-python Code.py
-```
-
-## Team
-
-**Meta Phreaks** — SOA University, KDSH 2026
+**Dependencies:** `acpi`, `power-profiles-daemon`, `libnotify`
 
 ---
 
-> Built under hackathon time constraints. Focus was on reproducibility and structured reasoning over end-to-end generation.
+### `hotspot.sh`
+Toggle script for a Wi-Fi hotspot using `create_ap`.
+
+- Starts hotspot on `wlan0` at channel 40 with SSID `ARCspot`
+- Kills the hotspot if already running
+- Sends desktop notifications on enable/disable
+
+**Dependencies:** `create_ap`, `libnotify`, `pkexec`
+
+---
+
+### `Calendar.sh`
+Toggle script for an AGS-based calendar/dashboard widget.
+
+- Starts AGS if not running, kills it if it is
+- Designed for use as a keybind or panel button
+
+**Dependencies:** `ags`
+
+---
+
+### `Dashboard.py`
+Minimal floating system monitor built with Tkinter.
+
+Displays live:
+- CPU usage (via `psutil`)
+- GPU usage (NVIDIA only via `nvidia-smi`)
+- Battery status (percentage + charging state)
+- Wi-Fi, Bluetooth status (via `nmcli`, `bluetoothctl`)
+
+**Dependencies:** `python`, `psutil`, `tkinter` (stdlib)
+
+---
+
+## System
+
+Tested on **CachyOS** (Arch-based). Should work on most systemd-based distros with minor adjustments.
+
+---
+
+> Personal scripts — expect rough edges. Built to solve real annoyances, not to be pretty.
